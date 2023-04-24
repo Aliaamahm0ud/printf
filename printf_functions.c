@@ -97,4 +97,3 @@ int print_di(va_list di)
 
 	return (curr);
 }
-
