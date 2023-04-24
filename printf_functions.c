@@ -47,7 +47,7 @@ int print_s(va_list s)
 
 int print_per(va_list p)
 {
-	/* (void) p; */
+	(void) p;
 	_putchar('%');
 	return (1);
 }
