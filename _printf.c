@@ -8,48 +8,56 @@
 
 int _printf(const char *format, ...)
 {
-	print_t p[] = { {"c", print_c}, {"s", print_s}, {"%", print_per},
-			{"d", print_di}, {"i", print_di} };
+	va_list args;
 
-	va_list valist;
+	va_start(args, format);
 
-int i = 0, c = 0, d = 0, curr = 0, len = 0, e = 0;
+	int count = 0;
 
-	va_start(valist, format);
-
-	if (format == NULL)
-		return (-1);
-
-	while (format != NULL && format[i] != 0)
+	while (*format != '\0')
 	{
-		c = 0;
-		if (format[i] == '%')
+		if (*format == '%')
 		{
-			for (d = 0; d < 5; d++)
+			format++;
+			if (*format == 'c')
 			{
-				if (format[i + 1] == 0)
-					return (-1);
+				char c = va_arg(args, int);
 
-				if (format[i + 1] == *(p[d].type))
+				_putchar(c);
+				count++;
+			}
+			else if (*format == 's')
+			{
+				char *str = va_arg(args, char *);
+
+				while (*str)
 				{
-					curr = curr + p[d].func(valist);
-					c = 2;
-					e = e + 2;
-					i = i + 1;
-					break;
+					_putchar(*str);
+					str++;
+					count++;
 				}
 			}
+			else if (*format == '%')
+			{
+				_putchar('%');
+				count++;
+			}
+			else if (*format == 'd' || *format == 'i')
+			{
+				int num = va_arg(args, int);
+
+				printf("%d", num);
+				count++;
+			}
 		}
-
-		if (c == 0)
-			_putchar(format[i]);
-
-		i = i + 1;
+		else
+		{
+			_putchar(*format);
+			count++;
+		}
+		format++;
 	}
 
-	len = i + curr - e;
-	va_end(valist);
-
-	return (len);
+	va_end(args);
+	return (count);
 }
-
